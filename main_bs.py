@@ -8,11 +8,6 @@ soup = BeautifulSoup(response.text, 'lxml')
 # ищем основной блок с данными
 base_block = soup.find('div', class_='row download-list-widget')
 
-# получаем заголовки
-headers = base_block.find(
-    'div', class_='list-row-headings').get_text(separator=',').split(',')
-headers = [i for i in headers if i != '\n']
-
 # получаем весь блок с основной информацией
 base_info = base_block.find('ol', class_='list-row-container menu')
 # в следующих строчка получаем данные версии, даты релиза и ссылки
@@ -27,9 +22,9 @@ release_notes = [i.find('a', href=True).get(
 
 # создаем датафрейм и сохраняем его в файл xlsx
 df = pandas.DataFrame({
-    headers[0]: release_version,
-    headers[1]: release_date,
-    headers[2]: release_download,
-    headers[3]: release_notes
+    'Release version': release_version,
+    'Release date': release_date,
+    'Download': release_download,
+    'Release Notes': release_notes
     })
 df.to_excel('./python_releases_bs.xlsx', sheet_name="Releases", index=False)
