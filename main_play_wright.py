@@ -9,9 +9,6 @@ with sync_playwright() as pw:
 
     # получаем основной блок с данными
     base_block = page.query_selector('.download-list-widget')
-    # получаем заголовки для таблицы
-    headers = base_block.query_selector('.list-row-headings')
-    headers = [i.inner_text() for i in headers.query_selector_all('span')]
 
     # получаем всю основную информацию о релизах
     base_info = base_block.query_selector('.list-row-container')
@@ -33,9 +30,9 @@ with sync_playwright() as pw:
 
 # создаем датафрейм и сохраняем его в файл xlsx
 df = pandas.DataFrame({
-    headers[0]: release_version,
-    headers[1]: release_date,
-    headers[2]: release_download,
-    headers[3]: release_notes
+    'Release version': release_version,
+    'Release date': release_date,
+    'Download': release_download,
+    'Release Notes': release_notes
     })
 df.to_excel('./python_releases_PW.xlsx', sheet_name="Releases", index=False)
